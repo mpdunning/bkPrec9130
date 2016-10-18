@@ -1,0 +1,307 @@
+record(stringin, "$(P):IOC") {
+  field(DESC, "$(DESC)")
+  field(VAL,  "$(IOC)")
+  field(PINI, "1")
+}
+record(waveform, "$(P):IDN"){
+  field(DESC, "SCPI ID String")
+  field(DTYP, "stream")
+  field(INP,  "@$(PROTOFILE) idn $(PORT)")
+  field(NELM, "33")
+  field(FTVL, "CHAR")
+  field(PINI, "YES")
+}
+record(longin, "$(P):STATUS"){
+  field(DESC, "Status byte")
+  field(DTYP, "stream")
+  field(INP,  "@$(PROTOFILE) getStatus $(PORT)")
+}
+record(stringin, "$(P):ERROR"){
+  field(DESC, "Error")
+  field(DTYP, "stream")
+  field(INP,  "@$(PROTOFILE) getErr $(PORT)")
+}
+
+# Channel select --------------------------
+record(mbbo, "$(P):CHAN:SEL"){
+  field(DESC, "Channel select")
+  field(ONVL, "1")
+  field(TWVL, "2")
+  field(THVL, "3")
+  field(ONST, "1")
+  field(TWST, "2")
+  field(THST, "3")
+  field(OUT,  "$(P):CHAN:SEL_write PP")
+}
+record(mbbo,"$(P):CHAN:SEL_write") {
+  field(DTYP, "stream")
+  field(ONVL, "1")
+  field(TWVL, "2")
+  field(THVL, "3")
+  field(ONST, "1")
+  field(TWST, "2")
+  field(THST, "3")
+  field(SDIS, "$(P):CHAN:SEL_sync.PACT")
+  field(DISV, "1")
+  field(OUT,  "@$(PROTOFILE) setChan $(PORT)")
+}
+record(mbbi, "$(P):CHAN:SEL_RBV"){
+  field(DESC, "Channel select")
+  field(DTYP, "stream")
+  field(ONVL, "1")
+  field(TWVL, "2")
+  field(THVL, "3")
+  field(ONST, "1")
+  field(TWST, "2")
+  field(THST, "3")
+  field(INP,  "@$(PROTOFILE) getChan $(PORT)")
+  field(FLNK, "$(P):CHAN:SEL_sync.PROC")
+}
+record(mbbo,"$(P):CHAN:SEL_sync") {
+  field(ONVL, "1")
+  field(TWVL, "2")
+  field(THVL, "3")
+  field(ONST, "1")
+  field(TWST, "2")
+  field(THST, "3")
+  field(DOL,  "$(P):CHAN:SEL_RBV")
+  field(OMSL, "closed_loop")
+  field(OUT,  "$(P):CHAN:SEL PP")
+}
+
+#--- Voltage ----------------------------------------------------
+record(ao, "$(P):VOLTAGE"){
+  field(DESC, "Voltage set point")
+  field(PREC, "3")
+  field(EGU,  "V")
+  field(DRVL, "0")
+  field(DRVH, "30")
+  field(LOPR, "0")
+  field(HOPR, "30")
+  field(OUT,  "$(P):VOLTAGE_write PP")
+}
+record(ao, "$(P):VOLTAGE_write"){
+  field(DTYP, "stream")
+  field(SDIS, "$(P):VOLTAGE_sync.PACT")
+  field(DISV, "1")
+  field(OUT,  "@$(PROTOFILE) setVoltage $(PORT)")
+  field(PREC, "3")
+  field(EGU,  "V")
+}
+record(ai, "$(P):VOLTAGE_RBV"){
+  field(DESC, "Voltage RBV")
+  field(DTYP, "stream")
+  field(INP,  "@$(PROTOFILE) getVoltage $(PORT)")
+  field(PREC, "3")
+  field(EGU,  "V")
+  field(FLNK, "$(P):VOLTAGE_sync.PROC")
+}
+record(ao, "$(P):VOLTAGE_sync"){
+  field(PREC, "3")
+  field(EGU,  "V")
+  field(DOL,  "$(P):VOLTAGE_RBV NPP")
+  field(OMSL, "closed_loop")
+  field(OUT,  "$(P):VOLTAGE PP")
+}
+
+#--- Current ----------------------------------------------------
+record(ao, "$(P):CURRENT"){
+  field(DESC, "Current set point")
+  field(PREC, "3")
+  field(EGU,  "A")
+  field(DRVL, "0")
+  field(DRVH, "3")
+  field(LOPR, "0")
+  field(HOPR, "3")
+  field(OUT,  "$(P):CURRENT_write PP")
+}
+record(ao, "$(P):CURRENT_write"){
+  field(DTYP, "stream")
+  field(SDIS, "$(P):CURRENT_sync.PACT")
+  field(DISV, "1")
+  field(OUT,  "@$(PROTOFILE) setCurrent $(PORT)")
+  field(PREC, "3")
+  field(EGU,  "A")
+}
+record(ai, "$(P):CURRENT_RBV"){
+  field(DESC, "Current RBV")
+  field(DTYP, "stream")
+  field(INP,  "@$(PROTOFILE) getCurrent $(PORT)")
+  field(PREC, "3")
+  field(EGU,  "A")
+  field(FLNK, "$(P):CURRENT_sync.PROC")
+}
+record(ao, "$(P):CURRENT_sync"){
+  field(PREC, "3")
+  field(EGU,  "A")
+  field(DOL,  "$(P):CURRENT_RBV NPP")
+  field(OMSL, "closed_loop")
+  field(OUT,  "$(P):CURRENT PP")
+}
+
+#--- Output State ----------------------------------------------------
+record(bo, "$(P):OUT_STATE"){
+  field(DESC, "Output State")
+  field(ZNAM, "OFF")
+  field(ONAM, "ON")
+  field(OUT,  "$(P):OUT_STATE_write PP")
+}
+record(bo, "$(P):OUT_STATE_write"){
+  field(DTYP, "stream")
+  field(ZNAM, "OFF")
+  field(ONAM, "ON")
+  field(SDIS, "$(P):OUT_STATE_sync.PACT")
+  field(DISV, "1")
+  field(OUT,  "@$(PROTOFILE) setOutState $(PORT)")
+}
+record(bi, "$(P):OUT_STATE_RBV"){
+  field(DESC, "Output State RBV")
+  field(DTYP, "stream")
+  field(ZNAM, "OFF")
+  field(ONAM, "ON")
+  field(INP,  "@$(PROTOFILE) getOutState $(PORT)")
+  field(FLNK, "$(P):OUT_STATE_sync.PROC")
+}
+record(bo, "$(P):OUT_STATE_sync"){
+  field(ZNAM, "OFF")
+  field(ONAM, "ON")
+  field(DOL,  "$(P):OUT_STATE_RBV NPP")
+  field(OMSL, "closed_loop")
+  field(OUT,  "$(P):OUT_STATE PP")
+}
+
+#--- Actual voltage, current, power ----------------------------------------------------
+record(ai, "$(P):VOLTAGE:ACT"){
+  field(DESC, "Voltage actual")
+  field(DTYP, "stream")
+  field(INP,  "@$(PROTOFILE) getMeasVoltage $(PORT)")
+  field(PREC, "3")
+  field(EGU,  "V")
+}
+record(ai, "$(P):CURRENT:ACT"){
+  field(DESC, "Current actual")
+  field(DTYP, "stream")
+  field(INP,  "@$(PROTOFILE) getMeasCurrent $(PORT)")
+  field(PREC, "3")
+  field(EGU,  "A")
+}
+record(ai, "$(P):POWER:ACT"){
+  field(DESC, "Power actual")
+  field(DTYP, "stream")
+  field(INP,  "@$(PROTOFILE) getMeasPower $(PORT)")
+  field(PREC, "3")
+  field(EGU,  "W")
+}
+
+record(ai, "$(P):CH1:VACT"){
+  field(DESC, "Voltage actual")
+  field(DTYP, "stream")
+  field(INP,  "@$(PROTOFILE) getMeasVoltageAll($(P)) $(PORT)")
+  field(PREC, "3")
+  field(EGU,  "V")
+}
+record(ai, "$(P):CH2:VACT"){
+  field(DESC, "Voltage actual")
+  field(PREC, "3")
+  field(EGU,  "V")
+}
+record(ai, "$(P):CH3:VACT"){
+  field(DESC, "Voltage actual")
+  field(PREC, "3")
+  field(EGU,  "V")
+}
+
+record(ai, "$(P):CH1:IACT"){
+  field(DESC, "Current actual")
+  field(DTYP, "stream")
+  field(INP,  "@$(PROTOFILE) getMeasCurrentAll($(P)) $(PORT)")
+  field(PREC, "3")
+  field(EGU,  "A")
+}
+record(ai, "$(P):CH2:IACT"){
+  field(DESC, "Current actual")
+  field(PREC, "3")
+  field(EGU,  "A")
+}
+record(ai, "$(P):CH3:IACT"){
+  field(DESC, "Current actual")
+  field(PREC, "3")
+  field(EGU,  "A")
+}
+
+record(ai, "$(P):CH1:PACT"){
+  field(DESC, "Power actual")
+  field(DTYP, "stream")
+  field(INP,  "@$(PROTOFILE) getMeasPowerAll($(P)) $(PORT)")
+  field(PREC, "3")
+  field(EGU,  "W")
+}
+record(ai, "$(P):CH2:PACT"){
+  field(DESC, "Power actual")
+  field(PREC, "3")
+  field(EGU,  "W")
+}
+record(ai, "$(P):CH3:PACT"){
+  field(DESC, "Power actual")
+  field(PREC, "3")
+  field(EGU,  "W")
+}
+
+
+# Init and read sequences ---------------------------
+record(seq, "$(P):SEQ0"){
+  field(DESC, "Initialization sequence")
+  field(LNK1, "$(P):IDN.PROC")
+  field(DLY1, "$(DELAY0)")
+  field(PINI, "1")
+}
+record(seq, "$(P):SEQ1"){
+  field(DESC, "Read sequence")
+  field(LNK1, "$(P):CHAN:SEL_RBV.PROC")
+  field(DLY1, "$(DELAY1)")
+  field(LNK2, "$(P):VOLTAGE_RBV.PROC")
+  field(DLY2, "$(DELAY1)")
+  field(LNK3, "$(P):CURRENT_RBV.PROC")
+  field(DLY3, "$(DELAY1)")
+  field(LNK4, "$(P):OUT_STATE_RBV.PROC")
+  field(DLY4, "$(DELAY1)")
+  field(LNK5, "$(P):VOLTAGE:ACT.PROC")
+  field(DLY5, "$(DELAY1)")
+  field(LNK6, "$(P):CURRENT:ACT.PROC")
+  field(DLY6, "$(DELAY1)")
+  field(LNK7, "$(P):POWER:ACT.PROC")
+  field(DLY7, "$(DELAY1)")
+  field(SCAN, "$(SCAN1)")
+  field(FLNK, "$(P):SEQ2.PROC")
+}
+record(seq, "$(P):SEQ2"){
+  field(DESC, "Read sequence")
+  field(LNK1, "$(P):CH1:VACT.PROC")
+  field(DLY1, "$(DELAY1)")
+  field(LNK2, "$(P):CH2:VACT.PROC")
+  field(DLY2, "$(DELAY1)")
+  field(LNK3, "$(P):CH3:VACT.PROC")
+  field(DLY3, "$(DELAY1)")
+  field(LNK4, "$(P):CH1:IACT.PROC")
+  field(DLY4, "$(DELAY1)")
+  field(LNK5, "$(P):CH2:IACT.PROC")
+  field(DLY5, "$(DELAY1)")
+  field(LNK6, "$(P):CH3:IACT.PROC")
+  field(DLY6, "$(DELAY1)")
+  field(LNK7, "$(P):CH1:PACT.PROC")
+  field(DLY7, "$(DELAY1)")
+  field(LNK8, "$(P):CH2:PACT.PROC")
+  field(DLY8, "$(DELAY1)")
+  field(LNK9, "$(P):CH3:PACT.PROC")
+  field(DLY9, "$(DELAY1)")
+  field(FLNK, "$(P):SEQ3.PROC")
+}
+record(seq, "$(P):SEQ3"){
+  field(DESC, "Read sequence")
+  field(LNK1, "$(P):ERROR.PROC")
+  field(DLY1, "$(DELAY1)")
+  field(LNK2, "$(P):STATUS.PROC")
+  field(DLY2, "$(DELAY1)")
+}
+
+

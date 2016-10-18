@@ -1,0 +1,89 @@
+InTerminator=LF;
+OutTerminator=CR;
+ReadTimeout=1500;
+
+
+idn {
+    out "*idn?";
+    in "%100c";
+}
+
+getStatus {
+    out "*stb?";
+    in "%d";
+}
+
+getErr {
+    out "syst:err?";
+    in "%#s";
+}
+
+
+getChan {
+    out "inst:nsel?";
+    in "%d";
+}
+
+setChan {
+    out "inst:nsel %d";
+}
+
+getOutState {
+    out "outp?";
+    in "%d";
+}
+
+setOutState {
+    out "outp %d";
+}
+
+getVoltage {
+    out "volt?";
+    in "%f";
+}
+
+setVoltage {
+    out "volt %f";
+}
+
+getCurrent {
+    out "curr?";
+    in "%f";
+}
+
+setCurrent {
+    out "curr %f";
+}
+
+getMeasVoltage {
+    out "meas:volt?";
+    in "%f";
+}
+
+getMeasCurrent {
+    out "meas:curr?";
+    in "%f";
+}
+
+getMeasPower {
+    out "meas:pow?";
+    in "%f";
+}
+
+getMeasVoltageAll {
+    out "meas:volt:all?";
+    in "%f,%(\$1:CH2:VACT)f,%(\$1:CH3:VACT)f";
+}
+
+getMeasCurrentAll {
+    out "meas:curr:all?";
+    in "%f,%(\$1:CH2:IACT)f,%(\$1:CH3:IACT)f";
+}
+
+getMeasPowerAll {
+    out "meas:pow:all?";
+    in "%f,%(\$1:CH2:PACT)f,%(\$1:CH3:PACT)f";
+}
+
+
+

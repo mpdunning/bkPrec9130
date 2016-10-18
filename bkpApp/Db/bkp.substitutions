@@ -1,0 +1,16 @@
+file bkpCommon.template {
+pattern
+{None}
+{None}
+}
+
+
+#file bkpCh.template {
+#pattern 
+#{CHAN}
+#{   1}
+#{   2}
+#{   3}
+#}
+
+

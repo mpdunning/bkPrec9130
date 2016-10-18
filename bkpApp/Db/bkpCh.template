@@ -1,0 +1,30 @@
+#--- Voltage Ch.$(CHAN) ----------------------------------------------------
+record(ai, "$(P):CH$(CHAN):VACT"){
+  field(DESC, "Voltage actual, Ch.$(CHAN)")
+  field(DTYP, "stream")
+  field(INP,  "@$(PROTOFILE) getMeasVoltageAll($(P)) $(PORT)")
+  field(PREC, "3")
+  field(EGU,  "V")
+}
+
+#--- Current Ch.$(CHAN) ----------------------------------------------------
+record(ai, "$(P):CH$(CHAN):IACT"){
+  field(DESC, "Current actual, Ch.$(CHAN)")
+  field(DTYP, "stream")
+  field(INP,  "@$(PROTOFILE) getMeasCurrentAll($(P)) $(PORT)")
+  field(PREC, "3")
+  field(EGU,  "A")
+}
+
+#--- Power Ch.$(CHAN) ----------------------------------------------------
+record(ai, "$(P):CH$(CHAN):PACT"){
+  field(DESC, "Power actual, Ch.$(CHAN)")
+  field(DTYP, "stream")
+  field(INP,  "@$(PROTOFILE) getMeasPowerAll($(P)) $(PORT)")
+  field(PREC, "3")
+  field(EGU,  "W")
+}
+
+
+
+
